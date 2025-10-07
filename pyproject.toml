@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "tutorx-mcp"
+version = "0.1.0"
+description = "MCP that deliver personalized AI-powered tutoring."
+authors = ["Your Name <you@example.com>"]
+packages = [{ include = "mcp_server" }]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+mcp = {extras = ["cli"], version = ">=1.9.3"}
+fastapi = ">=0.109.0"
+uvicorn = ">=0.27.0"
+gradio = ">=4.19.0"
+numpy = ">=1.24.0"
+pillow = ">=10.0.0"
+google-generativeai = "*"
+mistralai = "*"
+pytest = {version = "^8.3.2", optional = true}
+requests = {version = "^2.32.3", optional = true}
+
+[tool.poetry.extras]
+test = ["pytest", "requests"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
