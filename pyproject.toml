@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tutorx-mcp"
+version = "0.1.0"
+description = "A comprehensive Model Context Protocol (MCP) server for educational AI tutoring."
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+authors = [
+    { name = "Meet Patel", email = "meetpatel006@gmail.com" }
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "mcp[cli]>=1.9.3",
+    "fastapi>=0.109.0",
+    "uvicorn>=0.27.0",
+    "gradio>=4.19.0",
+    "numpy>=1.24.0",
+    "pillow>=10.0.0",
+    "google-generativeai",
+    "mistralai",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "unittest-xml-reporting",
+]
+
+[project.urls]
+Homepage = "https://github.com/Meetpatel006/TutorX"
+"Bug Tracker" = "https://github.com/Meetpatel006/TutorX/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["mcp_server"]
