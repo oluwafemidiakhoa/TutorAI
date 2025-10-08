@@ -1,10 +1,15 @@
-from ..mcp_instance import mcp
+from fastapi import APIRouter
 from ..model import gemini_flash
+
+router = APIRouter(
+    prefix="/ai_tutor",
+    tags=["AI Tutor Tools"],
+)
 
 # In-memory store for tutoring sessions. In a real app, this would be a database.
 sessions = {}
 
-@mcp.tool("tutorx/ai_tutor/start_session")
+@router.post("/start_session", summary="Start a new AI tutoring session")
 def start_tutoring_session(student_id: str) -> dict:
     """
     Start a new contextualized AI tutoring session with memory.
@@ -16,7 +21,7 @@ def start_tutoring_session(student_id: str) -> dict:
     sessions[session_id] = {"student_id": student_id, "history": [], "understanding": {}}
     return {"session_id": session_id, "message": "Tutoring session started."}
 
-@mcp.tool("tutorx/ai_tutor/chat")
+@router.post("/chat", summary="Send a message to the AI tutor")
 def ai_tutor_chat(session_id: str, message: str) -> dict:
     """
     Interactive chat with the AI tutor within a session.
@@ -37,7 +42,7 @@ def ai_tutor_chat(session_id: str, message: str) -> dict:
 
     return {"response": response}
 
-@mcp.tool("tutorx/ai_tutor/get_step_by_step")
+@router.get("/get_step_by_step", summary="Get step-by-step guidance for a concept")
 def get_step_by_step_guidance(concept: str) -> dict:
     """
     Break down a complex concept into manageable steps.
@@ -49,7 +54,7 @@ def get_step_by_step_guidance(concept: str) -> dict:
     guidance = gemini_flash.generate_text(prompt)
     return {"concept": concept, "guidance": guidance}
 
-@mcp.tool("tutorx/ai_tutor/get_alternative_explanations")
+@router.get("/get_alternative_explanations", summary="Get an alternative explanation for a concept")
 def get_alternative_explanations(concept: str, explanation_type: str = "analogy") -> dict:
     """
     Provide an alternative explanation for a concept (e.g., analogy, real-world example).
@@ -62,7 +67,7 @@ def get_alternative_explanations(concept: str, explanation_type: str = "analogy"
     explanation = gemini_flash.generate_text(prompt)
     return {"concept": concept, "explanation_type": explanation_type, "explanation": explanation}
 
-@mcp.tool("tutorx/ai_tutor/update_understanding")
+@router.post("/update_understanding", summary="Update a student's understanding level")
 def update_student_understanding(session_id: str, concept: str, level: float) -> dict:
     """
     Track and adapt to a student's level of understanding.
@@ -78,7 +83,7 @@ def update_student_understanding(session_id: str, concept: str, level: float) ->
     sessions[session_id]["understanding"][concept] = level
     return {"message": f"Updated understanding of '{concept}' to {level}."}
 
-@mcp.tool("tutorx/ai_tutor/end_session")
+@router.post("/end_session", summary="End a tutoring session")
 def end_tutoring_session(session_id: str) -> dict:
     """
     End a tutoring session and provide a summary.

@@ -1,7 +1,12 @@
-from ..mcp_instance import mcp
+from fastapi import APIRouter
 from ..resources import concept_graph
 
-@mcp.tool("tutorx/learning_path/get")
+router = APIRouter(
+    prefix="/learning_path",
+    tags=["Learning Path Tools"],
+)
+
+@router.get("/get", summary="Generate a personalized learning path")
 def get_learning_path(student_id: str, target_concept: str) -> dict:
     """
     Generate a personalized learning path for a student to reach a target concept.

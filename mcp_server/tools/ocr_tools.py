@@ -1,30 +1,45 @@
 import os
-from ..mcp_instance import mcp
-from mistralai import Mistral
+from fastapi import APIRouter, UploadFile, File
 from PIL import Image
 import io
 
-# Configure the Mistral API key
-try:
-    api_key = os.environ["MISTRAL_API_KEY"]
-    client = Mistral(api_key=api_key)
-except KeyError:
-    print("Warning: MISTRAL_API_KEY environment variable not set.")
-    client = None
+router = APIRouter(
+    prefix="/ocr",
+    tags=["OCR Tools"],
+)
 
-@mcp.tool("tutorx/ocr/mistral_document")
-def mistral_document_ocr(image_bytes: bytes) -> dict:
+client = None
+
+def get_client():
+    """
+    Lazily initializes and returns the Mistral client.
+    Imports are deferred to avoid issues in environments where they might hang.
+    """
+    global client
+    if client is None:
+        try:
+            from mistralai import Mistral
+            api_key = os.environ["MISTRAL_API_KEY"]
+            client = Mistral(api_key=api_key)
+        except (KeyError, ImportError) as e:
+            print(f"Warning: Could not initialize Mistral. Error: {e}")
+    return client
+
+@router.post("/mistral_document", summary="Extract text from a document image")
+async def mistral_document_ocr(image: UploadFile = File(...)) -> dict:
     """
     Extract and process text from a document image using Mistral OCR.
 
-    :param image_bytes: The byte content of the image to process.
+    :param image: The image file to process.
     :return: A dictionary containing the extracted text.
     """
-    if client is None:
-        return {"error": "Mistral API not configured. Please set the MISTRAL_API_KEY."}
+    c = get_client()
+    if c is None:
+        return {"error": "Mistral API not configured or failed to initialize."}
 
     try:
-        image = Image.open(io.BytesIO(image_bytes))
+        image_bytes = await image.read()
+        img = Image.open(io.BytesIO(image_bytes))
         # This is a placeholder for actual OCR functionality.
         # Mistral's current Python client doesn't directly support OCR.
         # In a real implementation, you would use a service that provides OCR.

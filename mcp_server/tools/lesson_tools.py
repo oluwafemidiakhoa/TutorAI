@@ -1,7 +1,12 @@
-from ..mcp_instance import mcp
+from fastapi import APIRouter
 from ..model import gemini_flash
 
-@mcp.tool("tutorx/lesson/generate")
+router = APIRouter(
+    prefix="/lesson",
+    tags=["Lesson Tools"],
+)
+
+@router.post("/generate", summary="Generate a lesson plan for a given concept")
 def generate_lesson_tool(concept: str, learning_style: str = "visual") -> dict:
     """
     Create a complete lesson plan for a given concept, tailored to a specific learning style.

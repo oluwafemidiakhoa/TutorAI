@@ -1,7 +1,12 @@
-from ..mcp_instance import mcp
+from fastapi import APIRouter
 from ..model import gemini_flash
 
-@mcp.tool("tutorx/content/generate_interactive_exercise")
+router = APIRouter(
+    prefix="/content",
+    tags=["Content Generation Tools"],
+)
+
+@router.post("/generate_interactive_exercise", summary="Generate an interactive exercise")
 def generate_interactive_exercise(topic: str) -> dict:
     """
     Create an engaging interactive exercise with multiple components.
@@ -13,7 +18,7 @@ def generate_interactive_exercise(topic: str) -> dict:
     content = gemini_flash.generate_text(prompt)
     return {"topic": topic, "exercise": content}
 
-@mcp.tool("tutorx/content/generate_adaptive_sequence")
+@router.post("/generate_adaptive_sequence", summary="Generate an adaptive content sequence")
 def generate_adaptive_content_sequence(topic: str, student_level: str) -> dict:
     """
     Build an adaptive content sequence that adjusts to student performance.
@@ -26,7 +31,7 @@ def generate_adaptive_content_sequence(topic: str, student_level: str) -> dict:
     content = gemini_flash.generate_text(prompt)
     return {"topic": topic, "student_level": student_level, "sequence_start": content}
 
-@mcp.tool("tutorx/content/generate_scenario_learning")
+@router.post("/generate_scenario_learning", summary="Generate a scenario-based learning experience")
 def generate_scenario_based_learning(topic: str) -> dict:
     """
     Create a realistic scenario-based learning experience.
@@ -38,7 +43,7 @@ def generate_scenario_based_learning(topic: str) -> dict:
     content = gemini_flash.generate_text(prompt)
     return {"topic": topic, "scenario": content}
 
-@mcp.tool("tutorx/content/generate_multimodal")
+@router.post("/generate_multimodal", summary="Generate multimodal content")
 def generate_multimodal_content(topic: str, modalities: list) -> dict:
     """
     Generate content for different learning modalities (e.g., text, visual ideas, audio script).
@@ -51,7 +56,7 @@ def generate_multimodal_content(topic: str, modalities: list) -> dict:
     content = gemini_flash.generate_text(prompt)
     return {"topic": topic, "modalities": modalities, "content": content}
 
-@mcp.tool("tutorx/content/generate_adaptive_assessment")
+@router.post("/generate_adaptive_assessment", summary="Generate an adaptive assessment")
 def generate_adaptive_assessment(topic: str) -> dict:
     """
     Create an assessment that adapts based on student responses.
@@ -63,7 +68,7 @@ def generate_adaptive_assessment(topic: str) -> dict:
     content = gemini_flash.generate_text(prompt)
     return {"topic": topic, "assessment_start": content}
 
-@mcp.tool("tutorx/content/generate_gamified")
+@router.post("/generate_gamified", summary="Generate gamified learning content")
 def generate_gamified_content(topic: str) -> dict:
     """
     Generate game-based learning content with mechanics like points and badges.
@@ -75,7 +80,7 @@ def generate_gamified_content(topic: str) -> dict:
     content = gemini_flash.generate_text(prompt)
     return {"topic": topic, "game_description": content}
 
-@mcp.tool("tutorx/content/validate")
+@router.post("/validate", summary="Validate AI-generated educational content")
 def validate_generated_content(content: str, topic: str) -> dict:
     """
     Perform a quality-check and validation of educational content.

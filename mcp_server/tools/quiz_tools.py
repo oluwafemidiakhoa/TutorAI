@@ -1,7 +1,12 @@
-from ..mcp_instance import mcp
+from fastapi import APIRouter
 from ..model import gemini_flash
 
-@mcp.tool("tutorx/quiz/generate")
+router = APIRouter(
+    prefix="/quiz",
+    tags=["Quiz Tools"],
+)
+
+@router.post("/generate", summary="Generate a quiz for a specific concept")
 def generate_quiz_tool(concept: str, difficulty: str = "medium", num_questions: int = 5) -> dict:
     """
     Create a quiz for a specific concept with customizable difficulty.

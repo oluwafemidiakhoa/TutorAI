@@ -1,5 +1,5 @@
-from mcp_server.server import mcp
 import uvicorn
+from mcp_server.server import app
 
 if __name__ == "__main__":
-    uvicorn.run(mcp, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000)

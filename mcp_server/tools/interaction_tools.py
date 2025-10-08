@@ -1,7 +1,12 @@
-from ..mcp_instance import mcp
+from fastapi import APIRouter
 from ..model import gemini_flash
 
-@mcp.tool("tutorx/interaction/text")
+router = APIRouter(
+    prefix="/interaction",
+    tags=["Interaction Tools"],
+)
+
+@router.post("/text", summary="Process a student's text query")
 def text_interaction(student_query: str, session_context: dict = None) -> dict:
     """
     Process a student's text query and provide an educational response.
@@ -24,7 +29,7 @@ def text_interaction(student_query: str, session_context: dict = None) -> dict:
         "updated_context": session_context,
     }
 
-@mcp.tool("tutorx/interaction/check_originality")
+@router.post("/check_originality", summary="Check a submission for originality")
 def check_submission_originality(submission_text: str) -> dict:
     """
     Analyze a student submission for potential plagiarism.

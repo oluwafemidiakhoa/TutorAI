@@ -1,7 +1,12 @@
-from ..mcp_instance import mcp
+from fastapi import APIRouter
 from ..resources import concept_graph
 
-@mcp.tool("tutorx/concept/get")
+router = APIRouter(
+    prefix="/concept",
+    tags=["Concept Tools"],
+)
+
+@router.get("/get", summary="Get information about an educational concept")
 def get_concept_tool(concept_name: str) -> dict:
     """
     Retrieve detailed information about an educational concept.
@@ -11,7 +16,7 @@ def get_concept_tool(concept_name: str) -> dict:
     """
     return concept_graph.get_concept(concept_name)
 
-@mcp.tool("tutorx/concept/assess_skill")
+@router.get("/assess_skill", summary="Assess a student's skill level for a concept")
 def assess_skill_tool(concept_name: str, student_id: str) -> dict:
     """
     Evaluate a student's understanding of a specific concept.

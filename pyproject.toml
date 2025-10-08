@@ -17,9 +17,10 @@ google-generativeai = "*"
 mistralai = "*"
 pytest = {version = "^8.3.2", optional = true}
 requests = {version = "^2.32.3", optional = true}
+fastapi-mcp = {version = "*", optional = true}
 
 [tool.poetry.extras]
-test = ["pytest", "requests"]
+test = ["pytest", "requests", "fastapi-mcp"]
 
 [build-system]
 requires = ["poetry-core"]
